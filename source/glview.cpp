@@ -162,10 +162,8 @@ void glView::mouseMoveEvent(QMouseEvent* mo) {
 void glView::wheelEvent(QWheelEvent* pe) {
   if (proj_type) {
       int res = pe->angleDelta().y();
-      if (res > 0)
-        zPos += 0.1;
-      else if (res < 0)
-        zPos -= 0.1;
+      if (res > 0) zPos += 0.1;
+      else if (res < 0) zPos -= 0.1;
   } else {
       int res = pe->angleDelta().y();
       if (res > 0) nSca+=0.1;

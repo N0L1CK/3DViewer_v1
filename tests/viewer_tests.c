@@ -17,9 +17,9 @@ START_TEST(test_parse_obj) {
   init_obj(&obj, 1, 1);
   code = open_file("./object/cube.obj", &obj);
   ck_assert_int_eq(obj.vertex_cnt, 8);
-  ck_assert_float_eq_tol(obj.vertices[0][0], 1.745441, EPS);
+  ck_assert_float_eq_tol(obj.vertices[0], 1.745441, EPS);
   ck_assert_int_eq(obj.edge_cnt, 12);
-  ck_assert_int_eq(obj.edges[0][1], 3);
+  ck_assert_int_eq(obj.edges[1], 2);
   ck_assert_int_eq(code, OK);
   clean_obj(&obj);
 }
@@ -31,9 +31,9 @@ START_TEST(test_motion) {
   move_x(&obj, -2.0);
   move_y(&obj, -3.0);
   move_z(&obj, 4.0);
-  ck_assert_float_eq_tol(obj.vertices[0][0], -0.254559, EPS);
-  ck_assert_float_eq_tol(obj.vertices[0][1], -1.254559, EPS);
-  ck_assert_float_eq_tol(obj.vertices[0][2], 2.254559, EPS);
+  ck_assert_float_eq_tol(obj.vertices[0], -0.254559, EPS);
+  ck_assert_float_eq_tol(obj.vertices[1], -1.254559, EPS);
+  ck_assert_float_eq_tol(obj.vertices[2], 2.254559, EPS);
   clean_obj(&obj);
 }
 END_TEST
@@ -44,9 +44,9 @@ START_TEST(test_rotation) {
   rotate_x(&obj, -2.0);
   rotate_y(&obj, -3.0);
   rotate_z(&obj, 4.0);
-  ck_assert_float_eq_tol(obj.vertices[0][0], -0.700771, EPS);
-  ck_assert_float_eq_tol(obj.vertices[0][1], 2.7279991, EPS);
-  ck_assert_float_eq_tol(obj.vertices[0][2], 1.0984681, EPS);
+  ck_assert_float_eq_tol(obj.vertices[0], -0.700771, EPS);
+  ck_assert_float_eq_tol(obj.vertices[1], 2.7279991, EPS);
+  ck_assert_float_eq_tol(obj.vertices[2], 1.0984681, EPS);
   clean_obj(&obj);
 }
 END_TEST
@@ -55,9 +55,9 @@ START_TEST(test_scaling) {
   init_obj(&obj, 1, 1);
   code = open_file("./object/cube.obj", &obj);
   scale(&obj, 2.0);
-  ck_assert_float_eq_tol(obj.vertices[0][0], 3.490882, EPS);
-  ck_assert_float_eq_tol(obj.vertices[0][1], 3.490882, EPS);
-  ck_assert_float_eq_tol(obj.vertices[0][2], -3.490882, EPS);
+  ck_assert_float_eq_tol(obj.vertices[0], 3.490882, EPS);
+  ck_assert_float_eq_tol(obj.vertices[1], 3.490882, EPS);
+  ck_assert_float_eq_tol(obj.vertices[2], -3.490882, EPS);
   clean_obj(&obj);
 }
 END_TEST

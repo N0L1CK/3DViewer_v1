@@ -1,11 +1,11 @@
-#include "header/settings.h"
+#include "../header/settings.h"
 
 #include "ui_settings.h"
 
 Settings::Settings(QWidget *parent) : QDialog(parent), ui(new Ui::Settings) {
   ui->setupUi(this);
-  config_file = QCoreApplication::applicationDirPath() + "/settings.conf";
-  settings = new QSettings(config_file, QSettings::NativeFormat);
+  config_file = QDir::homePath() + "/settings.conf";
+  settings = new QSettings(config_file, QSettings::IniFormat);
   load_settings();
   ui->vertex_color_r->setSuffix(" R");
   ui->vertex_color_g->setSuffix(" G");
@@ -18,7 +18,10 @@ Settings::Settings(QWidget *parent) : QDialog(parent), ui(new Ui::Settings) {
   ui->bg_color_b->setSuffix(" B");
 }
 
-Settings::~Settings() { delete ui; }
+Settings::~Settings() {
+    save_settings();
+    delete ui;
+}
 
 void Settings::load_settings() {
   ui->vertex_color_r->setValue(settings->value("vertex_color_r", 138).toInt());
@@ -41,21 +44,21 @@ void Settings::load_settings() {
 }
 
 void Settings::save_settings() {
-  settings->setValue("vertex_color_r", QVariant::fromValue(ui->vertex_color_r));
-  settings->setValue("vertex_color_g", QVariant::fromValue(ui->vertex_color_g));
-  settings->setValue("vertex_color_b", QVariant::fromValue(ui->vertex_color_b));
-  settings->setValue("vertex_size", QVariant::fromValue(ui->vertex_size));
-  settings->setValue("vertex_shape", QVariant::fromValue(ui->vertex_shape));
-  settings->setValue("edge_color_r", QVariant::fromValue(ui->edge_color_r));
-  settings->setValue("edge_color_g", QVariant::fromValue(ui->edge_color_g));
-  settings->setValue("edge_color_b", QVariant::fromValue(ui->edge_color_b));
-  settings->setValue("edge_width", QVariant::fromValue(ui->edge_width));
-  settings->setValue("edge_type", QVariant::fromValue(ui->edge_type));
-  settings->setValue("bg_color_r", QVariant::fromValue(ui->bg_color_r));
-  settings->setValue("bg_color_g", QVariant::fromValue(ui->bg_color_g));
-  settings->setValue("bg_color_b", QVariant::fromValue(ui->bg_color_b));
+  settings->setValue("vertex_color_r", QVariant::fromValue(ui->vertex_color_r->value()));
+  settings->setValue("vertex_color_g", QVariant::fromValue(ui->vertex_color_g->value()));
+  settings->setValue("vertex_color_b", QVariant::fromValue(ui->vertex_color_b->value()));
+  settings->setValue("vertex_size", QVariant::fromValue(ui->vertex_size->value()));
+  settings->setValue("vertex_shape", QVariant::fromValue(ui->vertex_shape->currentIndex()));
+  settings->setValue("edge_color_r", QVariant::fromValue(ui->edge_color_r->value()));
+  settings->setValue("edge_color_g", QVariant::fromValue(ui->edge_color_g->value()));
+  settings->setValue("edge_color_b", QVariant::fromValue(ui->edge_color_b->value()));
+  settings->setValue("edge_width", QVariant::fromValue(ui->edge_width->value()));
+  settings->setValue("edge_type", QVariant::fromValue(ui->edge_type->currentIndex()));
+  settings->setValue("bg_color_r", QVariant::fromValue(ui->bg_color_r->value()));
+  settings->setValue("bg_color_g", QVariant::fromValue(ui->bg_color_g->value()));
+  settings->setValue("bg_color_b", QVariant::fromValue(ui->bg_color_b->value()));
   settings->setValue("projection_type",
-                     QVariant::fromValue(ui->projection_type));
+                     QVariant::fromValue(ui->projection_type->currentIndex()));
 }
 
 void Settings::set_default_settings() {
@@ -106,4 +109,6 @@ void Settings::on_set_default_clicked() {
   load_settings();
 }
 
-void Settings::on_set_apply_clicked() { save_settings(); }
+void Settings::on_set_apply_clicked() {
+    save_settings();
+}

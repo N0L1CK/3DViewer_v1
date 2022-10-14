@@ -8,7 +8,7 @@
  */
 void move_x(obj_t* obj, float value) {
   for (int i = 0; i < obj->vertex_cnt; i++) {
-    obj->vertices[i][0] += value;
+    obj->vertices[3 * i] += value;
   }
 }
 
@@ -20,7 +20,7 @@ void move_x(obj_t* obj, float value) {
  */
 void move_y(obj_t* obj, float value) {
   for (int i = 0; i < obj->vertex_cnt; i++) {
-    obj->vertices[i][1] += value;
+    obj->vertices[3 * i + 1] += value;
   }
 }
 
@@ -32,7 +32,7 @@ void move_y(obj_t* obj, float value) {
  */
 void move_z(obj_t* obj, float value) {
   for (int i = 0; i < obj->vertex_cnt; i++) {
-    obj->vertices[i][2] += value;
+    obj->vertices[3 * i + 2] += value;
   }
 }
 
@@ -46,10 +46,10 @@ void move_z(obj_t* obj, float value) {
  */
 void rotate_x(obj_t* obj, float angle) {
   for (int i = 0; i < obj->vertex_cnt; i++) {
-    double y = obj->vertices[i][1];
-    double z = obj->vertices[i][2];
-    obj->vertices[i][1] = y * cos(angle) - z * sin(angle);
-    obj->vertices[i][2] = y * sin(angle) + z * cos(angle);
+    double y = obj->vertices[3 * i + 1];
+    double z = obj->vertices[3 * i + 2];
+    obj->vertices[3 * i + 1] = y * cos(angle) - z * sin(angle);
+    obj->vertices[3 * i + 2] = y * sin(angle) + z * cos(angle);
   }
 }
 
@@ -63,10 +63,10 @@ void rotate_x(obj_t* obj, float angle) {
  */
 void rotate_y(obj_t* obj, float angle) {
   for (int i = 0; i < obj->vertex_cnt; i++) {
-    double x = obj->vertices[i][0];
-    double z = obj->vertices[i][2];
-    obj->vertices[i][0] = x * cos(angle) + z * sin(angle);
-    obj->vertices[i][2] = -x * sin(angle) + z * cos(angle);
+    double x = obj->vertices[3 * i];
+    double z = obj->vertices[3 * i + 2];
+    obj->vertices[3 * i] = x * cos(angle) + z * sin(angle);
+    obj->vertices[3 * i + 2] = -x * sin(angle) + z * cos(angle);
   }
 }
 
@@ -80,10 +80,10 @@ void rotate_y(obj_t* obj, float angle) {
  */
 void rotate_z(obj_t* obj, float angle) {
   for (int i = 0; i < obj->vertex_cnt; i++) {
-    double x = obj->vertices[i][0];
-    double y = obj->vertices[i][1];
-    obj->vertices[i][0] = x * cos(angle) - y * sin(angle);
-    obj->vertices[i][1] = x * sin(angle) + y * cos(angle);
+    double x = obj->vertices[3 * i];
+    double y = obj->vertices[3 * i + 1];
+    obj->vertices[3 * i] = x * cos(angle) - y * sin(angle);
+    obj->vertices[3 * i + 1] = x * sin(angle) + y * cos(angle);
   }
 }
 
@@ -95,10 +95,8 @@ void rotate_z(obj_t* obj, float angle) {
  */
 void scale(obj_t* obj, float ratio) {
   if (ratio > 0) {
-    for (int row = 0; row < obj->vertex_cnt; row++) {
-      for (int col = 0; col < 3; col++) {
-        obj->vertices[row][col] *= ratio;
-      }
+    for (int i = 0; i < (obj->vertex_cnt) * 3; i++) {
+      obj->vertices[i] *= ratio;
     }
   }
 }

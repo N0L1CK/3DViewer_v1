@@ -36,10 +36,25 @@ int parse_obj(FILE *fp, obj_t *obj) {
   while (fgets(line, LENGTH, fp) && error_code == OK) {
     if (*line == 'v' && *(line + 1) == ' ') {
       obj->vertex_cnt++;
-      error_code = parse_vertex(line, obj);
     } else if (*line == 'f' && *(line + 1) == ' ') {
       obj->edge_cnt++;
-      error_code = parse_edge(line, obj);
+    }
+  }
+  obj->vertices =
+      (double *)realloc(obj->vertices, sizeof(double *) * obj->vertex_cnt * 3);
+  obj->edges = (int *)realloc(obj->edges, sizeof(int *) * obj->edge_cnt * 6);
+  if (obj->vertices && obj->edges) {
+    fseek(fp, 0, SEEK_SET);
+    int v_cnt = obj->vertex_cnt;
+    int e_cnt = obj->edge_cnt;
+    while (fgets(line, LENGTH, fp) && error_code == OK) {
+      if (*line == 'v' && *(line + 1) == ' ') {
+        error_code = parse_vertex(line, obj, v_cnt);
+        v_cnt--;
+      } else if (*line == 'f' && *(line + 1) == ' ') {
+        error_code = parse_edge(line, obj, e_cnt);
+        e_cnt--;
+      }
     }
   }
   *line = '\0';
@@ -52,19 +67,17 @@ int parse_obj(FILE *fp, obj_t *obj) {
  *
  * @param ptr Pointer to line in obj.file, char pointer type
  * @param obj Struct, obj_t pointer type
+ * @param v_cnt Shift of index in array of vertecies, int type
  * @return OK/OBJ_VALUES_ERROR, int type
  */
-int parse_vertex(char *ptr, obj_t *obj) {
+int parse_vertex(char *ptr, obj_t *obj, int v_cnt) {
   int error_code = OK;
-  obj->vertices =
-      (double **)realloc(obj->vertices, sizeof(double **) * obj->vertex_cnt);
-  obj->vertices[obj->vertex_cnt - 1] = (double *)calloc(3, sizeof(double));
   ptr += 2;
-  obj->vertices[obj->vertex_cnt - 1][0] = strtod(ptr, &ptr);
+  obj->vertices[(obj->vertex_cnt - v_cnt) * 3] = strtod(ptr, &ptr);
   if ((*ptr) != ' ') error_code = OBJ_VALUES_ERROR;
-  obj->vertices[obj->vertex_cnt - 1][1] = strtod(ptr, &ptr);
+  obj->vertices[(obj->vertex_cnt - v_cnt) * 3 + 1] = strtod(ptr, &ptr);
   if ((*ptr) != ' ') error_code = OBJ_VALUES_ERROR;
-  obj->vertices[obj->vertex_cnt - 1][2] = strtod(ptr, &ptr);
+  obj->vertices[(obj->vertex_cnt - v_cnt) * 3 + 2] = strtod(ptr, &ptr);
   return error_code;
 }
 
@@ -74,23 +87,26 @@ int parse_vertex(char *ptr, obj_t *obj) {
  *
  * @param ptr Pointer to line in obj.file, char pointer type
  * @param obj Struct, obj_t pointer type
+ * @param e_cnt Shift of index in array of edges, int type
  * @return OK/OBJ_VALUES_ERROR, int type
  */
-int parse_edge(char *ptr, obj_t *obj) {
+int parse_edge(char *ptr, obj_t *obj, int e_cnt) {
   int error_code = OK;
-  obj->edges = (int **)realloc(obj->edges, sizeof(int **) * obj->edge_cnt);
-  obj->edges[obj->edge_cnt - 1] = (int *)calloc(1, sizeof(int));
-  int i = 0;
-  while (strchr(ptr, ' ') != NULL && *ptr != '\0' && *ptr != 0) {
-    i++;
-    ptr = strchr(ptr, ' ');
-    obj->edges[obj->edge_cnt - 1] =
-        (int *)realloc(obj->edges[obj->edge_cnt - 1], sizeof(int) * i);
-    obj->edges[obj->edge_cnt - 1][i - 1] = (int)strtol(ptr, &ptr, 10);
-  }
-  obj->edges[obj->edge_cnt - 1] =
-      (int *)realloc(obj->edges[obj->edge_cnt - 1], sizeof(int) * (i + 1));
-  obj->edges[obj->edge_cnt - 1][i] = 0;
+  if (strchr(ptr, ' ') == NULL) error_code = OBJ_VALUES_ERROR;
+  ptr = strchr(ptr, ' ');
+  int first_index = (int)strtol(ptr, &ptr, 10) - 1;
+  obj->edges[(obj->edge_cnt - e_cnt) * 6] = first_index;
+  if (strchr(ptr, ' ') == NULL) error_code = OBJ_VALUES_ERROR;
+  ptr = strchr(ptr, ' ');
+  int second_index = (int)strtol(ptr, &ptr, 10) - 1;
+  obj->edges[(obj->edge_cnt - e_cnt) * 6 + 1] = second_index;
+  obj->edges[(obj->edge_cnt - e_cnt) * 6 + 2] = second_index;
+  if (strchr(ptr, ' ') == NULL) error_code = OBJ_VALUES_ERROR;
+  ptr = strchr(ptr, ' ');
+  int third_index = (int)strtol(ptr, &ptr, 10) - 1;
+  obj->edges[(obj->edge_cnt - e_cnt) * 6 + 3] = third_index;
+  obj->edges[(obj->edge_cnt - e_cnt) * 6 + 4] = third_index;
+  obj->edges[(obj->edge_cnt - e_cnt) * 6 + 5] = first_index;
   return error_code;
 }
 
@@ -99,9 +115,9 @@ int parse_edge(char *ptr, obj_t *obj) {
  *
  * @param obj Struct, obj_t pointer type
  */
-void init_obj(obj_t *obj, int vert, int edg) {
-  obj->vertices = (double **)calloc(vert, sizeof(double **));
-  obj->edges = (int **)calloc(edg, sizeof(int **));
+void init_obj(obj_t *obj, int vertex_cnt, int edge_cnt) {
+  obj->vertices = (double *)calloc(vertex_cnt, sizeof(double *));
+  obj->edges = (int *)calloc(edge_cnt, sizeof(int *));
   obj->vertex_cnt = 0;
   obj->edge_cnt = 0;
 }
@@ -114,15 +130,9 @@ void init_obj(obj_t *obj, int vert, int edg) {
 void clean_obj(obj_t *obj) {
   if (obj) {
     if (obj->vertices) {
-      for (int i = 0; i < obj->vertex_cnt; i++) {
-        if (obj->vertices[i]) free(obj->vertices[i]);
-      }
       free(obj->vertices);
     }
     if (obj->edges) {
-      for (int i = 0; i < obj->edge_cnt; i++) {
-        if (obj->edges[i]) free(obj->edges[i]);
-      }
       free(obj->edges);
     }
     obj = NULL;

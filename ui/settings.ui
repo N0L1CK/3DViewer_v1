@@ -1105,7 +1105,7 @@ color: rgb(255, 255, 255);
 font-size: 14px;</string>
    </property>
    <property name="text">
-    <string>Image save format</string>
+    <string>GRID AND AXIS</string>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
@@ -1117,7 +1117,7 @@ font-size: 14px;</string>
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QRadioButton" name="bmp">
+  <widget class="QRadioButton" name="grid_off">
    <property name="geometry">
     <rect>
      <x>110</x>
@@ -1152,13 +1152,13 @@ QRadioButton::indicator:unchecked {
 </string>
    </property>
    <property name="text">
-    <string>bmp</string>
+    <string>OFF</string>
    </property>
    <property name="checked">
     <bool>false</bool>
    </property>
   </widget>
-  <widget class="QRadioButton" name="jpeg">
+  <widget class="QRadioButton" name="grid_on">
    <property name="geometry">
     <rect>
      <x>40</x>
@@ -1193,7 +1193,7 @@ QRadioButton::indicator:unchecked {
 </string>
    </property>
    <property name="text">
-    <string>jpg</string>
+    <string>ON</string>
    </property>
    <property name="checked">
     <bool>true</bool>

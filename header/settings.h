@@ -1,7 +1,7 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include <QDialog>
+#include <QWidget>
 #include <QSettings>
 #include <QDir>
 
@@ -9,7 +9,7 @@ namespace Ui {
 class Settings;
 }  // namespace Ui
 
-class Settings : public QDialog {
+class Settings : public QWidget {
   Q_OBJECT
 
  public:

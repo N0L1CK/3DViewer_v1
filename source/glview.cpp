@@ -92,8 +92,8 @@ void glView::paintGL() {
       {
           nSca = 1;
       }
-      ratio=(GLfloat)800/(GLfloat)600;
-      glOrtho(-2.0/ratio, 2.0/ratio, -2.0, 2.0, -10.0, 10.0);
+      ratio=(GLfloat)600/(GLfloat)600;
+      glOrtho(-2.0/ratio, 2.0/ratio, -2.0, 2.0, -50.0, 50.0);
   }
   glScalef(nSca, nSca, nSca);
   glTranslatef(xPos, 0, 0);
@@ -162,12 +162,14 @@ void glView::mouseMoveEvent(QMouseEvent* mo) {
 void glView::wheelEvent(QWheelEvent* pe) {
   if (proj_type) {
       int res = pe->angleDelta().y();
-      if (res > 0) zPos += 0.1;
-      else if (res < 0) zPos -= 0.1;
+      if (res > 0)
+        zPos += 0.1;
+      else if (res < 0)
+        zPos -= 0.1;
   } else {
       int res = pe->angleDelta().y();
-      if (res > 0) nSca+=0.1;
-      else if (res < 0) nSca-=0.1;
+      if (res > 0 ) nSca+=0.1;
+      else if (res < 0 && nSca > 0.2) nSca-=0.1;
   }
   update();
 }

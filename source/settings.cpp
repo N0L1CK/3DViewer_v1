@@ -2,7 +2,7 @@
 
 #include "ui_settings.h"
 
-Settings::Settings(QWidget *parent) : QDialog(parent), ui(new Ui::Settings) {
+Settings::Settings(QWidget *parent) : QWidget(parent), ui(new Ui::Settings) {
   ui->setupUi(this);
   config_file = QDir::homePath() + "/settings.conf";
   settings = new QSettings(config_file, QSettings::IniFormat);

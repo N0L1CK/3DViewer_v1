@@ -26,6 +26,7 @@ class MainViewer : public QMainWindow {
   MainViewer(QWidget *parent = nullptr);
   ~MainViewer();
   void get_settings();
+  void moveEvent(QMoveEvent *e);
 
  private slots:
   void on_translate_clicked();
@@ -45,7 +46,9 @@ class MainViewer : public QMainWindow {
   void saveGifFrame();
   void settings_handler();
 
+
  private:
+  void closeEvent(QCloseEvent *e);
   Ui::MainViewer *ui;
   Settings *settings;
   glView *gl;

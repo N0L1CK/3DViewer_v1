@@ -13,11 +13,10 @@ MainViewer::MainViewer(QWidget *parent)
   get_settings();
   connect(settings->ui->set_apply, SIGNAL(clicked()), this, SLOT(settings_handler()));
   connect(settings->ui->set_default, SIGNAL(clicked()), this, SLOT(settings_handler()));
+
 }
 
 MainViewer::~MainViewer() {
-  //settings->hide();
-  delete settings;
   delete ui;
 }
 
@@ -41,8 +40,22 @@ void MainViewer::get_settings()
     ui->glWindow->update();
 }
 
+void MainViewer::moveEvent(QMoveEvent *e)
+{
+    if (e){
+        QPoint p = MainViewer::pos();
+        settings->move(p.x() - 200, p.y() + 0);
+    }
+}
+
 void MainViewer::settings_handler() {
     get_settings();
+}
+
+void MainViewer::closeEvent(QCloseEvent *e)
+{
+    if (e)
+        delete settings;
 }
 
 void MainViewer::on_load_file_clicked() {

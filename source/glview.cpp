@@ -1,52 +1,46 @@
 #include "header/glview.h"
 
 glView::glView(QWidget* parent) : QOpenGLWidget(parent) {
-    xRot = 4;
-    yRot = 0;
-    zRot = 0;
-    xPos = 0;
-    yPos = 0;
-    zPos = -4;
-    xR = 0;
-    yR = 0;
-    zR = 0;
-    x = 0;
-    y = 0;
-    z = 0;
-    nSca = 1;
+  xRot = 4;
+  yRot = 0;
+  zRot = 0;
+  xPos = 0;
+  yPos = 0;
+  zPos = -4;
+  xR = 0;
+  yR = 0;
+  zR = 0;
+  x = 0;
+  y = 0;
+  z = 0;
+  nSca = 1;
   project = false;
 }
 
-void glView::initializeGL() {
-  glEnable(GL_DEPTH_TEST);
-
-  // ratio=(GLfloat)800/(GLfloat)600;
-  // glOrtho(-2.0/ratio, 2.0/ratio, -2.0, 2.0, -10.0, 10.0);
-}
+void glView::initializeGL() { glEnable(GL_DEPTH_TEST); }
 
 void glView::DrawObject(obj_t* obj) {
   glEnableClientState(GL_VERTEX_ARRAY);
   glVertexPointer(3, GL_DOUBLE, 0, obj->vertices);
-  if (vertex_shape > 0)
-  {
-      if (vertex_shape == 1) {
-          glEnable(GL_POINT_SMOOTH); // круглые точки
-      } else {
-          glDisable(GL_POINT_SMOOTH);
-      }
-      glPointSize(vertex_size);   // размер точки
-      glColor3d(vertex_r/255.0, vertex_g/255.0, vertex_b/255.0);  // цвет точки
-      glDrawArrays(GL_POINTS, 0, obj->vertex_cnt);
+  if (vertex_shape > 0) {
+    if (vertex_shape == 1) {
+      glEnable(GL_POINT_SMOOTH);
+    } else {
+      glDisable(GL_POINT_SMOOTH);
+    }
+    glPointSize(vertex_size);
+    glColor3d(vertex_r / 255.0, vertex_g / 255.0, vertex_b / 255.0);
+    glDrawArrays(GL_POINTS, 0, obj->vertex_cnt);
   }
   if (edge_type == 0) {
-      glDisable(GL_LINE_STIPPLE);  // непрерывная ребро
+    glDisable(GL_LINE_STIPPLE);
   } else {
-      glEnable(GL_LINE_STIPPLE);
-      glLineStipple(1, 0x1111);
+    glEnable(GL_LINE_STIPPLE);
+    glLineStipple(1, 0x1111);
   }
 
   glLineWidth(edge_width);
-  glColor3d(edge_r/255.0, edge_g/255.0, edge_b/255.0);      // цвет линии
+  glColor3d(edge_r / 255.0, edge_g / 255.0, edge_b / 255.0);
   glDrawElements(GL_LINES, obj->edge_cnt * 6, GL_UNSIGNED_INT, obj->edges);
   glDisableClientState(GL_VERTEX_ARRAY);
 }
@@ -79,21 +73,20 @@ void glView::DrawGrid(float cx, float cy, float step) {
 }
 
 void glView::paintGL() {
-  glClearColor(bkg_r/255.0, bkg_g/255.0, bkg_b/255.0, 1);
+  glClearColor(bg_color_r / 255.0, bg_color_g / 255.0, bg_color_b / 255.0, 1);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
   if (proj_type) {
-      nSca = 4;
-      glFrustum(-1, 1, -1, 1, 1, qPow(3000, 2));  //проекция центральная
+    nSca = 4;
+    glFrustum(-1, 1, -1, 1, 1, qPow(3000, 2));
   } else {
-      if (nSca == 4)
-      {
-          nSca = 1;
-      }
-      ratio=(GLfloat)600/(GLfloat)600;
-      glOrtho(-2.0/ratio, 2.0/ratio, -2.0, 2.0, -50.0, 50.0);
+    if (nSca == 4) {
+      nSca = 1;
+    }
+    ratio = (GLfloat)600 / (GLfloat)600;
+    glOrtho(-2.0 / ratio, 2.0 / ratio, -2.0, 2.0, -50.0, 50.0);
   }
   glScalef(nSca, nSca, nSca);
   glTranslatef(xPos, 0, 0);
@@ -103,13 +96,13 @@ void glView::paintGL() {
   glRotatef(yRot, 0.0f, 1.0f, 0.0f);
   glRotatef(zRot, 0.0f, 0.0f, 1.0f);
   if (grid_status) {
-      drawAxis();
-      DrawGrid(100.0, 100.0, 1.0);
+    DrawAxis();
+    DrawGrid(100.0, 100.0, 1.0);
   }
   if (project) DrawObject(obj);
 }
 
-void glView::drawAxis() {
+void glView::DrawAxis() {
   glLineWidth(3.0f);
   glColor4f(1.0f, 0.0f, 0.0f, 0.3);
   glBegin(GL_LINES);
@@ -161,17 +154,17 @@ void glView::mouseMoveEvent(QMouseEvent* mo) {
 
 void glView::wheelEvent(QWheelEvent* pe) {
   if (proj_type) {
-      int res = pe->angleDelta().y();
-      if (res > 0)
-        zPos += 0.1;
-      else if (res < 0)
-        zPos -= 0.1;
+    int res = pe->angleDelta().y();
+    if (res > 0)
+      zPos += 0.1;
+    else if (res < 0)
+      zPos -= 0.1;
   } else {
-      int res = pe->angleDelta().y();
-      if (res > 0 ) nSca+=0.1;
-      else if (res < 0 && nSca > 0.2) nSca-=0.1;
+    int res = pe->angleDelta().y();
+    if (res > 0)
+      nSca += 0.1;
+    else if (res < 0 && nSca > 0.2)
+      nSca -= 0.1;
   }
   update();
 }
-
-

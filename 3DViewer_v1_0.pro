@@ -1,5 +1,5 @@
 QT       += core gui opengl openglwidgets printsupport
-LIBS += -lopengl32 -lglu32
+# LIBS += -lopengl32 -lglu32
 include(QTGifimage-master/src/gifimage/qtgifimage.pri)
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets

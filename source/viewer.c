@@ -114,6 +114,8 @@ int parse_edge(char *ptr, obj_t *obj, int e_cnt) {
  * @brief Creates obj_t structure.
  *
  * @param obj Struct, obj_t pointer type
+ * @param vertex_cnt Count of vertecies, int type
+ * @param edge_cnt Count of edges, int type
  */
 void init_obj(obj_t *obj, int vertex_cnt, int edge_cnt) {
   obj->vertices = (double *)calloc(vertex_cnt, sizeof(double *));

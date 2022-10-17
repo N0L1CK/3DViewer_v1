@@ -11,51 +11,44 @@ MainViewer::MainViewer(QWidget *parent)
   settings = new Settings();
   init_obj(&objMain, 1, 1);
   get_settings();
-  connect(settings->ui->set_apply, SIGNAL(clicked()), this, SLOT(settings_handler()));
-  connect(settings->ui->set_default, SIGNAL(clicked()), this, SLOT(settings_handler()));
-
+  connect(settings->ui->set_apply, SIGNAL(clicked()), this,
+          SLOT(settings_handler()));
+  connect(settings->ui->set_default, SIGNAL(clicked()), this,
+          SLOT(settings_handler()));
 }
 
-MainViewer::~MainViewer() {
-  delete ui;
+MainViewer::~MainViewer() { delete ui; }
+
+void MainViewer::get_settings() {
+  ui->glWindow->bg_color_r = settings->ui->bg_color_r->value();
+  ui->glWindow->bg_color_g = settings->ui->bg_color_g->value();
+  ui->glWindow->bg_color_b = settings->ui->bg_color_b->value();
+  ui->glWindow->vertex_r = settings->ui->vertex_color_r->value();
+  ui->glWindow->vertex_g = settings->ui->vertex_color_g->value();
+  ui->glWindow->vertex_b = settings->ui->vertex_color_b->value();
+  ui->glWindow->edge_r = settings->ui->edge_color_r->value();
+  ui->glWindow->edge_g = settings->ui->edge_color_g->value();
+  ui->glWindow->edge_b = settings->ui->edge_color_b->value();
+  ui->glWindow->vertex_size = settings->ui->vertex_size->value();
+  ui->glWindow->edge_width = settings->ui->edge_width->value();
+  ui->glWindow->vertex_shape = settings->ui->vertex_shape->currentIndex();
+  ui->glWindow->edge_type = settings->ui->edge_type->currentIndex();
+  ui->glWindow->grid_status = settings->ui->grid_on->isChecked() ? 1 : 0;
+  ui->glWindow->proj_type = settings->ui->projection_type->currentIndex();
+  ui->glWindow->update();
 }
 
-void MainViewer::get_settings()
-{
-    ui->glWindow->bkg_r = settings->ui->bg_color_r->value();
-    ui->glWindow->bkg_g = settings->ui->bg_color_g->value();
-    ui->glWindow->bkg_b = settings->ui->bg_color_b->value();
-    ui->glWindow->vertex_r = settings->ui->vertex_color_r->value();
-    ui->glWindow->vertex_g = settings->ui->vertex_color_g->value();
-    ui->glWindow->vertex_b = settings->ui->vertex_color_b->value();
-    ui->glWindow->edge_r = settings->ui->edge_color_r->value();
-    ui->glWindow->edge_g = settings->ui->edge_color_g->value();
-    ui->glWindow->edge_b = settings->ui->edge_color_b->value();
-    ui->glWindow->vertex_size = settings->ui->vertex_size->value();
-    ui->glWindow->edge_width = settings->ui->edge_width->value();
-    ui->glWindow->vertex_shape = settings->ui->vertex_shape->currentIndex();
-    ui->glWindow->edge_type = settings->ui->edge_type->currentIndex();
-    ui->glWindow->grid_status = settings->ui->grid_on->isChecked() ? 1 : 0;
-    ui->glWindow->proj_type = settings->ui->projection_type->currentIndex();
-    ui->glWindow->update();
+void MainViewer::settings_handler() { get_settings(); }
+
+void MainViewer::closeEvent(QCloseEvent *event) {
+  if (event) delete settings;
 }
 
-void MainViewer::moveEvent(QMoveEvent *e)
-{
-    if (e){
-        QPoint p = MainViewer::pos();
-        settings->move(p.x() - 200, p.y() + 0);
-    }
-}
-
-void MainViewer::settings_handler() {
-    get_settings();
-}
-
-void MainViewer::closeEvent(QCloseEvent *e)
-{
-    if (e)
-        delete settings;
+void MainViewer::moveEvent(QMoveEvent *e) {
+  if (e) {
+    QPoint p = MainViewer::pos();
+    settings->move(p.x() - 200, p.y() + 0);
+  }
 }
 
 void MainViewer::on_load_file_clicked() {

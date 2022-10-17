@@ -1,8 +1,8 @@
 CC=gcc -std=c11 -D_GNU_SOURCE
 CFLAGS=-c -Wall -Wextra -Werror
 BUILD_DIR=build
-INSTALL_DIR=3dViewer_V_1_0
-APP=3dViewer_V_1_0
+INSTALL_DIR=3dViewer_v1_0
+APP=3dViewer_v1_0
 GCOV=-fprofile-arcs -ftest-coverage
 LIBC:=./source/viewer.c ./source/affine.c
 LIBH:=./header/viewer.h
@@ -30,7 +30,7 @@ endif
 all: build
 
 build: 
-	@qmake -o $(BUILD_DIR)/Makefile ./frontend/$(APP).pro $(QTFLAGS) CONFIG+=qtquickbuilder
+	@qmake -o $(BUILD_DIR)/Makefile ./$(APP).pro $(QTFLAGS) CONFIG+=qtquickbuilder
 	@make -C $(BUILD_DIR)/ first
 
 rebuild: clean all

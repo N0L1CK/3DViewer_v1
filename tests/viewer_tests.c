@@ -15,7 +15,7 @@ END_TEST
 
 START_TEST(test_parse_obj) {
   init_obj(&obj, 1, 1);
-  code = open_file("./object/cube.obj", &obj);
+  code = open_file("./object/Cube.obj", &obj);
   ck_assert_int_eq(obj.vertex_cnt, 8);
   ck_assert_float_eq_tol(obj.vertices[0], 1.745441, EPS);
   ck_assert_int_eq(obj.edge_cnt, 12);
@@ -27,7 +27,7 @@ END_TEST
 
 START_TEST(test_motion) {
   init_obj(&obj, 1, 1);
-  code = open_file("./object/cube.obj", &obj);
+  code = open_file("./object/Cube.obj", &obj);
   move_x(&obj, -2.0);
   move_y(&obj, -3.0);
   move_z(&obj, 4.0);
@@ -40,7 +40,7 @@ END_TEST
 
 START_TEST(test_rotation) {
   init_obj(&obj, 1, 1);
-  code = open_file("./object/cube.obj", &obj);
+  code = open_file("./object/Cube.obj", &obj);
   rotate_x(&obj, -2.0);
   rotate_y(&obj, -3.0);
   rotate_z(&obj, 4.0);
@@ -53,7 +53,7 @@ END_TEST
 
 START_TEST(test_scaling) {
   init_obj(&obj, 1, 1);
-  code = open_file("./object/cube.obj", &obj);
+  code = open_file("./object/Cube.obj", &obj);
   scale(&obj, 2.0);
   ck_assert_float_eq_tol(obj.vertices[0], 3.490882, EPS);
   ck_assert_float_eq_tol(obj.vertices[1], 3.490882, EPS);

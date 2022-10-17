@@ -26,13 +26,12 @@ class MainViewer : public QMainWindow {
   MainViewer(QWidget *parent = nullptr);
   ~MainViewer();
   void get_settings();
-  void moveEvent(QMoveEvent *e);
 
  private slots:
+  void on_load_file_clicked();
   void on_translate_clicked();
   void on_rotate_clicked();
   void on_scale_clicked();
-  void on_load_file_clicked();
   void on_slider_move_x_valueChanged(int value);
   void on_slider_move_y_valueChanged(int value);
   void on_slider_move_z_valueChanged(int value);
@@ -41,23 +40,23 @@ class MainViewer : public QMainWindow {
   void on_slider_rot_z_valueChanged(int value);
   void on_slider_scale_valueChanged(int value);
   void on_settings_clicked();
+  void settings_handler();
   void on_screenshot_clicked();
   void on_gif_clicked();
   void saveGifFrame();
-  void settings_handler();
-
 
  private:
-  void closeEvent(QCloseEvent *e);
   Ui::MainViewer *ui;
   Settings *settings;
   glView *gl;
   obj_t objMain;
-  void init_ui();
   QGifImage *gif;
   QImage *frame;
   QTimer *timer;
   int time;
   QString gifSavePath;
+  void init_ui();
+  void closeEvent(QCloseEvent *event);
+  void moveEvent(QMoveEvent *e);
 };
 #endif  // MAINVIEWER_H

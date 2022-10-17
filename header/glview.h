@@ -1,9 +1,15 @@
 #ifndef GLVIEW_H
 #define GLVIEW_H
+// #include <windows.h>
 
 #define GL_SILENCE_DEPRECATION
-#include <windows.h>
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
+#include <GL/gl.h>
 #include <GL/glu.h>
+#endif
 
 #include <QMouseEvent>
 #include <QOpenGLBuffer>
@@ -22,9 +28,9 @@ class glView : public QOpenGLWidget {
 
  private:
   void initializeGL() override;
-  void DrawGrid(float cx, float cy, float step);
   void paintGL() override;
-  void drawAxis();
+  void DrawGrid(float cx, float cy, float step);
+  void DrawAxis();
   void DrawObject(obj_t *obj);
   void mousePressEvent(QMouseEvent *) override;
   void mouseMoveEvent(QMouseEvent *) override;
@@ -35,13 +41,13 @@ class glView : public QOpenGLWidget {
 
  public:
   glView(QWidget *parent = nullptr);
+  obj_t *obj;
   double xRot, yRot, zRot, nSca, xPos, yPos, zPos;
   double xR, yR, zR, x, y, z;
   double vertex_r, vertex_g, vertex_b;
   double edge_r, edge_g, edge_b;
-  double bkg_r, bkg_g, bkg_b;
+  double bg_color_r, bg_color_g, bg_color_b;
   int vertex_size, edge_width, vertex_shape, edge_type, proj_type, grid_status;
-  obj_t *obj;
   bool project;
 };
 

@@ -1,9 +1,9 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include <QWidget>
-#include <QSettings>
 #include <QDir>
+#include <QSettings>
+#include <QWidget>
 
 namespace Ui {
 class Settings;
@@ -15,10 +15,10 @@ class Settings : public QWidget {
  public:
   explicit Settings(QWidget *parent = nullptr);
   ~Settings();
-    Ui::Settings *ui;
-    QSettings *settings;
-    void load_settings();
-    void save_settings();
+  Ui::Settings *ui;
+  QSettings *settings;
+  void load_settings();
+  void save_settings();
 
  public slots:
   void on_set_apply_clicked();
@@ -34,7 +34,6 @@ class Settings : public QWidget {
 
  private:
   QString config_file;
-
 };
 
 #endif  // SETTINGS_H
